@@ -25,13 +25,18 @@ app.use(express.static(path.join(__dirname, 'public'))); //set up to be our clie
 app.get('/', function(req, res){
     var title = 'Games List';
 
+
+
     client.lrange('games', 0, -1, function(err, reply){
-        res.render('index', {
-            title: title,
-            games: reply
+        client.hgetall('wishlist', function(err, wishlist){
+            res.render('index', {
+                title: title,
+                games: reply,
+                wishlist: wishlist
+            });
         });
-    })
-}) 
+    });
+});
 
 app.post('/game/add', function(req, res){
     var game = req.body.game;
@@ -59,6 +64,22 @@ app.post('/game/delete', function(req, res){
         res.redirect('/');
     });
 });
+
+
+app.post('/wishlist/add', function(req, res){
+    var wishlist = {}
+    wishlist.name = req.body.name;
+    wishlist.platform = req.body.platform
+
+    client.hmset('wishlist', ['name', wishlist.name, 'platform', wishlist.platform], function(err, reply){
+        if(err){
+            console.log(err)
+        }
+        console.log(reply)
+        res.redirect('/')
+    })
+})
+
 
 
 app.listen(3000);

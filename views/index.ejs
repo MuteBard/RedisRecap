@@ -29,4 +29,20 @@
         <% }) %>
     </ul>
     <input type="submit" value="Remove">
-<form>
+</form>
+
+<h3>Wish List</h3>
+Name: <%= wishlist.name %><br>
+Platform: <%= wishlist.platform %>
+
+
+<h3>Edit Next Game to Own</h3>
+<form method="post" action="/wishlist/add">
+    <label>Game Name</label><br>
+    <input type="text" name="name" placeholder="Game Name">
+    <br><br>
+    <label>Platform</label><br>
+    <input type="text" name="platform" placeholder="Platform">
+    <br><br>
+    <input type="submit" value="Submit">
+</form>
