@@ -31,9 +31,18 @@ app.get('/', function(req, res){
             games: reply
         });
     })
-
-
 }) 
+
+app.post('/game/add', function(req, res){
+    var game = req.body.game;
+    client.rpush('games', game, function(err, reply){
+        if(err){
+            console.log(err)
+        }
+        console.log('Task Added...')
+        res.redirect('/')
+    } )
+})
 
 
 app.listen(3000);
