@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public'))); //set up to be our client folder
 
 app.get('/', function(req, res){
-    var title = 'Games List'
+    var title = 'Games List';
 
     client.lrange('games', 0, -1, function(err, reply){
         res.render('index', {
@@ -37,12 +37,28 @@ app.post('/game/add', function(req, res){
     var game = req.body.game;
     client.rpush('games', game, function(err, reply){
         if(err){
-            console.log(err)
+            console.log(err);
         }
-        console.log('Task Added...')
-        res.redirect('/')
+        console.log('Task Added...');
+        res.redirect('/');
     } )
 })
+
+app.post('/game/delete', function(req, res){
+    var gamesToDel = req.body.games;
+    client.lrange('games', 0, -1, function(err, games){
+        for(var i = 0; i < games.length; i++){
+            if(gamesToDel.indexOf(games[i]) > -1){
+                client.lrem('games', 0, games[i], function(){
+                    if(err){
+                        console.log(err)
+                    }
+                });
+            }
+        }
+        res.redirect('/');
+    });
+});
 
 
 app.listen(3000);

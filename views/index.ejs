@@ -1,3 +1,12 @@
+<style>
+    .del:checked + span{
+        color:red;
+    }
+    .game-list{
+        list-style:none;
+    }
+</style>
+
 
 <form method="post" action="/game/add">
         <label>Add Task</label>
@@ -7,8 +16,17 @@
 
 
 <%= title %>
-<ul>
-    <% games.forEach(function(game){ %>
-        <li><%= game %></li>
-    <% }) %>
-</ul>
+
+<form method="post" action="/game/delete">
+    <ul class="game-list">
+        <% games.forEach(function(game){ %>
+            <li>
+                <label>
+                    <input type="checkbox" name="games" class="del" value="<%= game %>">
+                    <span><%= game %></span>
+                </label>
+            </li>
+        <% }) %>
+    </ul>
+    <input type="submit" value="Remove">
+<form>
